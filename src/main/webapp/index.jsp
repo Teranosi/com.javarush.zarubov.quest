@@ -9,6 +9,7 @@
 %>
 <%
     questService.choiceChecker(request.getParameter("Questions"));
+    request.setAttribute("questService", questService);
 %>
 <!DOCTYPE html>
 <html>
@@ -22,39 +23,30 @@
 <%
     if (request.getParameter("Restart") != null && request.getParameter("Restart").equals("R")) {
         questService.setPointer(0);
-
         questService.setDefeat(false);
         questService.setVictory(false);
-        out.println("<h1>" + questions.get(questService.getPointer()).getTitle() + "</h1>");
-        out.println("<form name=\"quest\" method=\"post\">");
+        out.println("<h1 class=\"text-center\">" + questions.get(questService.getPointer()).getTitle() + "</h1>");
+        out.println("<form class=\"text-center\" name=\"quest\" method=\"post\">");
         out.println("<button type=\"submit\" name=\"Questions\" value=\"A\">"
                 + questions.get(questService.getPointer()).getAnswerA() + "</button>");
         out.println("<button type=\"submit\" name=\"Questions\" value=\"B\">"
                 + questions.get(questService.getPointer()).getAnswerB() + "</button>");
         out.println("</form>");
     } else if (questService.isVictory()) {
-        out.println("<h1>" + "Победа" + "</h1>");
-        out.println("<form name=\"quest\" method=\"post\">");
+        out.println("<h1 class=\"text-center\">" + "Победа" + "</h1>");
+        out.println("<form class=\"text-center\" name=\"quest\" method=\"post\">");
         out.println("<button type=\"submit\" name=\"Restart\" value=\"R\">"
                 + "Начать сначала" + "</button>");
         out.println("</form>");
-        out.println("<p>" + "Статистика:" + "</p>");
-        out.println("<p>" + "ID: " + session.getId() + "</p>");
-        out.println("<p>" + "Количество правильных ответов: " + questService.getPointer() + "</p>");
-        out.println("<p>" + "Адресс: " + request.getRemoteAddr() + "</p>");
     } else if (questService.isDefeat()) {
-        out.println("<h1>" + "Поражение" + "</h1>");
-        out.println("<form name=\"quest\" method=\"post\">");
+        out.println("<h1 class=\"text-center\">" + "Поражение" + "</h1>");
+        out.println("<form class=\"text-center\" name=\"quest\" method=\"post\">");
         out.println("<button type=\"submit\" name=\"Restart\" value=\"R\">"
                 + "Начать сначала" + "</button>");
         out.println("</form>");
-        out.println("<p>" + "Статистика:" + "</p>");
-        out.println("<p>" + "ID: " + session.getId() + "</p>");
-        out.println("<p>" + "Количество правильных ответов: " + questService.getPointer() + "</p>");
-        out.println("<p>" + "Адресс: " + request.getRemoteAddr() + "</p>");
     } else {
-        out.println("<h1>" + questions.get(questService.getPointer()).getTitle() + "</h1>");
-        out.println("<form name=\"quest\" method=\"post\">");
+        out.println("<h1 class=\"text-center\">" + questions.get(questService.getPointer()).getTitle() + "</h1>");
+        out.println("<form class=\"text-center\" name=\"quest\" method=\"post\">");
         out.println("<button type=\"submit\" name=\"Questions\" value=\"A\">"
                 + questions.get(questService.getPointer()).getAnswerA() + "</button>");
         out.println("<button type=\"submit\" name=\"Questions\" value=\"B\">"
@@ -62,5 +54,9 @@
         out.println("</form>");
     }
 %>
+<c:out value="<p>Статистика:</p>" escapeXml="false"/>
+<c:out value="<p>ID: ${pageContext.session.id}</p>" escapeXml="false"/>
+<c:out value="<p>Количество правильных ответов: ${questService.getPointer()}</p>" escapeXml="false" />
+<c:out value="<p>Адресс: ${pageContext.request.remoteAddr}</p>" escapeXml="false"/>
 </body>
 </html>
